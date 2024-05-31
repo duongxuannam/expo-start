@@ -1,21 +1,28 @@
 import { unknownTrackImageUri } from '@/constants/images'
 import { useLastActiveTruck } from '@/hooks/useLastActiveTrack'
 import { defaultStyles } from '@/styles'
+import { useRouter } from 'expo-router'
 import React from 'react'
-import { StyleSheet, Text, TouchableOpacity, View, ViewProps } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, ViewProps } from 'react-native'
 import FastImage from 'react-native-fast-image'
 import { useActiveTrack } from 'react-native-track-player'
+import MovingText from './MovingText'
 import { PlayPauseButton, SkipToNextButton } from './PlayerControl'
 
 const FloatingPlayer = ({ style }: ViewProps) => {
+	const router = useRouter()
 	const activeTrack = useActiveTrack()
 	const lastAcitveTrack = useLastActiveTruck()
 	const displayedTrack = activeTrack ?? lastAcitveTrack
 
 	if (!displayedTrack) return null
 
+	const handlePress = () => {
+		router.navigate('/player')
+	}
+
 	return (
-		<TouchableOpacity activeOpacity={0.9} style={[styles.container, style]}>
+		<TouchableOpacity onPress={handlePress} activeOpacity={0.9} style={[styles.container, style]}>
 			<>
 				<FastImage
 					source={{
@@ -24,7 +31,13 @@ const FloatingPlayer = ({ style }: ViewProps) => {
 					style={styles.trackArtworkImage}
 				/>
 				<View style={styles.trackContainer}>
-					<Text style={styles.trackTitle}>{displayedTrack.title}</Text>
+					<MovingText
+						animationThreshold={25}
+						text="da sd asd asd asd asda sdsa sf df sadf sd fsd fd"
+						style={styles.trackTitle}
+					>
+						{/* {displayedTrack.title} */}
+					</MovingText>
 				</View>
 				<View style={styles.trackControlContainer}>
 					<PlayPauseButton iconSize={24} />
